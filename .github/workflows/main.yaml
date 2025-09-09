@@ -9,19 +9,18 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
-      - name: Set up JDK from pom.xml
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: |
-            ${{ steps.extract_jdk.outputs.java-version }}
-
       - name: Extract JDK version from pom.xml
         id: extract_jdk
         run: |
           version=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='properties']/*[local-name()='maven.compiler.source']/text()" pom.xml)
           echo "java-version=$version" >> $GITHUB_OUTPUT
-          shell: bash
+        shell: bash
+
+      - name: Set up JDK from pom.xml
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ steps.extract_jdk.outputs.java-version }}
       - name: Skip tests in Maven build
         run: mvn clean package -DskipTests
       - name: Upload JAR artifact
