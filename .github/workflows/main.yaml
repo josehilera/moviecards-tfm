@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: action/setup@v3
+      - name: Set up JDK from pom.xml
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: |
+            ${{ steps.extract_jdk.outputs.java-version }}
+
+      - name: Extract JDK version from pom.xml
+        id: extract_jdk
+        run: |
+          version=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='properties']/*[local-name()='maven.compiler.source']/text()" pom.xml)
+          echo "java-version=$version" >> $GITHUB_OUTPUT
+          shell: bash
+      - name: Skip tests in Maven build
+        run: mvn clean package -DskipTests
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar

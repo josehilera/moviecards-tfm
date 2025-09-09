@@ -1,0 +1,38 @@
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs
+/.idea/
+/*.iml
+*.ipr
+*.iws
+*.sw?
+/.vscode/
+/*.code-workspace
+
+# Environment files
+.env
+
+# Java
+*.class
+
+# Test reports
+/test-output/
+/surefire-reports/
+/jacoco.exec
+
+# Spring Boot
+spring.log
+
+# Others
+*.war
+*.jar
+*.ear
